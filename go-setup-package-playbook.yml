@@ -1,0 +1,20 @@
+- name: Setup package go
+  hosts: localhost
+  become: yes
+  become_user: ppp
+  tasks:
+    - name: Install templ
+      command: go install github.com/a-h/templ/cmd/templ@latest
+      become: yes
+    
+    - name: Test templ
+      command: templ --version
+      become: yes
+
+    - name: Install air
+      command: go install github.com/cosmtrek/air@latest
+      become: yes
+
+    - name: Install go-migrate PSQL
+      command: go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+      become: yes

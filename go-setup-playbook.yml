@@ -1,0 +1,30 @@
+# go-setup-playbook.yml - Linux
+---
+- name: Go Setup Playbook at Linux
+  hosts: localhost
+  vars:
+    - version: 1.22.4
+  tasks:
+    - name: Download go tar file
+      command: wget https://golang.org/dl/go{{ version }}.linux-amd64.tar.gz
+
+    - name: Delete previous installation
+      file:
+        path: ~/go
+        state: absent
+      become: true
+      become_user: ppp
+
+    - name: Extract tar file and move go folder to ~/go
+      command: tar -C ~ -xzf go{{ version }}.linux-amd64.tar.gz
+
+    - name: Delete downloaded tar file
+      command: rm -rf go{{ version }}.linux-amd64.tar.gz
+
+    - name: Source updated profile zshrc
+      ansible.builtin.shell: source ~/.zshrc
+      args:
+        executable: /bin/zsh
+
+    - name: Test go version
+      command: go version
